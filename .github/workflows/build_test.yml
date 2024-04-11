@@ -229,6 +229,34 @@ jobs:
           cmake --build out
           ctest --test-dir out
 
+  cmake_macos_11:
+    runs-on: macos-11
+
+    steps:
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.0.0
+
+      - name: Build and test
+        run: |
+          export CMAKE_BUILD_PARALLEL_LEVEL=2
+          export CTEST_PARALLEL_LEVEL=2
+          CXXFLAGS="-msse4.2 -maes -mpclmul -DHWY_DISABLED_TARGETS=6917529027641102544" cmake -G "Unix Makefiles" -DHWY_WARNINGS_ARE_ERRORS=ON -DCMAKE_CXX_STANDARD=17 -DHWY_ENABLE_CONTRIB=OFF -B out .
+          cmake --build out
+          ctest --test-dir out
+
+  cmake_macos_13:
+    runs-on: macos-13
+
+    steps:
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.0.0
+
+      - name: Build and test
+        run: |
+          export CMAKE_BUILD_PARALLEL_LEVEL=2
+          export CTEST_PARALLEL_LEVEL=2
+          CXXFLAGS="-msse4.2 -maes -mpclmul -DHWY_DISABLED_TARGETS=6917529027641102544" cmake -G "Unix Makefiles" -DHWY_WARNINGS_ARE_ERRORS=ON -DCMAKE_CXX_STANDARD=17 -DHWY_ENABLE_CONTRIB=OFF -B out .
+          cmake --build out
+          ctest --test-dir out
+
   bazel:
     runs-on: ubuntu-latest
     steps:
