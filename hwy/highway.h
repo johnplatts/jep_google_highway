@@ -458,8 +458,9 @@ struct AddExport {
       HWY_CHOOSE_TARGET_LIST(FUNC_NAME),                                     \
       HWY_CHOOSE_FALLBACK(FUNC_NAME),                                        \
   };                                                                         \
-  static hwy::AddExport HWY_CONCAT(HighwayAddTable, __LINE__)(               \
-      HWY_FUNCTION, #TABLE_NAME, &HWY_DISPATCH_TABLE(TABLE_NAME))
+  HWY_MAYBE_UNUSED static hwy::AddExport HWY_CONCAT(                         \
+      HighwayAddTable, __LINE__)(HWY_FUNCTION, #TABLE_NAME,                  \
+                                 &HWY_DISPATCH_TABLE(TABLE_NAME))
 
 // For non-template functions. Not necessarily invoked within a function, hence
 // we derive the string and variable names from FUNC_NAME, not HWY_FUNCTION.
@@ -473,8 +474,9 @@ struct AddExport {
       HWY_CHOOSE_TARGET_LIST(FUNC_NAME),                                     \
       HWY_CHOOSE_FALLBACK(FUNC_NAME),                                        \
   };                                                                         \
-  static hwy::AddExport HWY_CONCAT(HighwayAddTable, __LINE__)(               \
-      #FUNC_NAME, nullptr, &HWY_DISPATCH_TABLE(FUNC_NAME))
+  HWY_MAYBE_UNUSED static hwy::AddExport HWY_CONCAT(                         \
+      HighwayAddTable, __LINE__)(#FUNC_NAME, nullptr,                        \
+                                 &HWY_DISPATCH_TABLE(FUNC_NAME))
 
 #else  // !HWY_DISPATCH_MAP
 
