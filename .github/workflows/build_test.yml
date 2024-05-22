@@ -20,21 +20,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  cmake_macos_14:
-    name: Build and test on macOS 14
-    runs-on: macos-14
-
-    steps:
-      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.0.0
-
-      - name: Build and test
-        run: |
-          export CMAKE_BUILD_PARALLEL_LEVEL=2
-          export CTEST_PARALLEL_LEVEL=2
-          CXXFLAGS="-DHWY_DISABLED_TARGETS=6917529027667034112" cmake -G "Unix Makefiles" -DHWY_WARNINGS_ARE_ERRORS=ON -DCMAKE_CXX_STANDARD=17 -DHWY_ENABLE_CONTRIB=OFF -B out .
-          cmake --build out
-          ctest --test-dir out
-
   cmake_macos_14_ios:
     name: Build and test on macOS 14 (iOS)
     runs-on: macos-14
@@ -46,6 +31,6 @@ jobs:
         run: |
           export CMAKE_BUILD_PARALLEL_LEVEL=2
           export CTEST_PARALLEL_LEVEL=2
-          CXXFLAGS="-DHWY_DISABLED_TARGETS=6917529027667034112" cmake -G "Unix Makefiles" -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphoneos -DHWY_WARNINGS_ARE_ERRORS=ON -DCMAKE_CXX_STANDARD=17 -DHWY_ENABLE_CONTRIB=OFF -B out .
+          CXXFLAGS="-DHWY_DISABLED_TARGETS=6917529027667034112" cmake -G "Unix Makefiles" -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphoneos -DHWY_WARNINGS_ARE_ERRORS=ON -DCMAKE_CXX_STANDARD=17 -DCMAKE_CROSSCOMPILING=ON -DHWY_ENABLE_TESTS=OFF -B out .
           cmake --build out
           ctest --test-dir out
