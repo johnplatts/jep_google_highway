@@ -36,7 +36,7 @@ jobs:
           ctest --test-dir out
 
   cmake_macos_14_ios:
-    name: Build and test on macOS 14
+    name: Build and test on macOS 14 (iOS)
     runs-on: macos-14
 
     steps:
