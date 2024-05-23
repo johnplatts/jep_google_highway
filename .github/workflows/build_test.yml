@@ -26,22 +26,32 @@ jobs:
     strategy:
       matrix:
         include:
+          - name: Clang-16
+            extra_deps: clang-16
+            c_compiler: clang-16
+            cxx_compiler: clang++-16
+            cxx_flags: -DHWY_DISABLED_TARGETS=0x50
+            cxx_standard: 17
+
           - name: Clang-17
             extra_deps: clang-17
             c_compiler: clang-17
             cxx_compiler: clang++-17
+            cxx_flags: -DHWY_DISABLED_TARGETS=0x50
             cxx_standard: 17
 
           - name: Clang-18
             extra_deps: clang-18
             c_compiler: clang-18
             cxx_compiler: clang++-18
+            cxx_flags: -DHWY_DISABLED_TARGETS=0x50
             cxx_standard: 17
 
           - name: Clang-18 (C++23)
             extra_deps: clang-18
             c_compiler: clang-18
             cxx_compiler: clang++-18
+            cxx_flags: -DHWY_DISABLED_TARGETS=0x50
             cxx_standard: 23
 
           - name: GCC-13
@@ -87,6 +97,6 @@ jobs:
         run: |
           export CMAKE_BUILD_PARALLEL_LEVEL=2
           export CTEST_PARALLEL_LEVEL=2
-          CXXFLAGS=${{ matrix.cxx_flags }} CC=${{ matrix.c_compiler }} CXX=${{ matrix.cxx_compiler }} cmake -DHWY_WARNINGS_ARE_ERRORS=ON -DCMAKE_CXX_STANDARD=${{ matrix.cxx_standard }} -B out .
+          CXXFLAGS="${{ matrix.cxx_flags }}" CC=${{ matrix.c_compiler }} CXX=${{ matrix.cxx_compiler }} cmake -DHWY_WARNINGS_ARE_ERRORS=ON -DCMAKE_CXX_STANDARD=${{ matrix.cxx_standard }} -B out .
           cmake --build out
           ctest --test-dir out
