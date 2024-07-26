@@ -1,4 +1,3 @@
-# https://github.com/marketplace/actions/run-on-architecture
 name: Foreign architectures
 
 on: [push, pull_request]
@@ -6,47 +5,55 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-permissions:
-  contents: read
+permissions: read-all
 
 jobs:
   multiarch:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: true
       matrix:
         include:
           - arch: aarch64
-            distro: ubuntu_latest
+            gcc_target: aarch64-linux-gnu
+            qemu_emulator: qemu-aarch64
             cxx_flags: -Wno-psabi
           - arch: armv7
-            distro: ubuntu_latest
+            gcc_target: arm-linux-gnueabihf
+            qemu_emulator: qemu-arm
             cxx_flags: -Wno-psabi
             cmake_flags: -DHWY_CMAKE_ARM7:BOOL=ON
           - arch: ppc64le
-            distro: ubuntu_latest
+            gcc_target: powerpc64le-linux-gnu
+            qemu_emulator: qemu-ppc64le
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    - name: Build and test
-      uses: uraimo/run-on-arch-action@v2.7.2
-      id: build
-      with:
-        arch: ${{ matrix.arch }}
-        distro: ${{ matrix.distro }}
-        # Not required, but speeds up builds
-        githubToken: ${{ github.token }}
-        install: |
-          apt-get update -q -y
-          apt-get install -q -y --no-install-recommends \
+      - name: Harden Runner
+        uses: step-security/harden-runner@0d381219ddf674d61a7572ddd19d7941e271515c # v2.9.0
+        with:
+          egress-policy: audit  # cannot be block - runner does git checkout
+
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.0.0
+
+      - name: Install deps
+        run: |
+          sudo apt-get update -q -y
+          sudo apt-get install -q -y --no-install-recommends \
                 build-essential \
                 cmake \
-                libgtest-dev \
+                "g++-13-${{ matrix.gcc_target }}" \
                 ninja-build \
+                qemu-user \
                 ;
+
+      - name: Build and test
         run: |
           export CMAKE_BUILD_PARALLEL_LEVEL=2
           export CTEST_PARALLEL_LEVEL=2
-          CXXFLAGS=${{ matrix.cxx_flags }} cmake -GNinja ${{ matrix.cmake_flags }} -DHWY_SYSTEM_GTEST=ON -DHWY_WARNINGS_ARE_ERRORS=ON -B out .
+          CC="${{ matrix.gcc_target }}-gcc-13" CXX="${{ matrix.gcc_target }}-g++-13" \
+            CXXFLAGS=${{ matrix.cxx_flags }} cmake -GNinja ${{ matrix.cmake_flags }} \
+            -DCMAKE_C_COMPILER_TARGET="${{ matrix.gcc_target }}" \
+            -DCMAKE_CXX_COMPILER_TARGET="${{ matrix.gcc_target }}" \
+            -DCMAKE_CROSSCOMPILING_EMULATOR="/usr/bin/${{ matrix.qemu_emulator }};-L;/usr/${{ matrix.gcc_target }}" \
+            -DHWY_WARNINGS_ARE_ERRORS=ON -B out .
           cmake --build out
           ctest --test-dir out
