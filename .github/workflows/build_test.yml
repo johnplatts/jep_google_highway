@@ -26,78 +26,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: Clang-6.0
-            extra_deps: clang-6.0
-            c_compiler: clang-6.0
-            cxx_compiler: clang++-6.0
-            cxx_standard: 11
-
-          - name: Clang-6.0 (C++14)
-            extra_deps: clang-6.0
-            c_compiler: clang-6.0
-            cxx_compiler: clang++-6.0
-            cxx_standard: 14
-
-          - name: Clang-6.0 (C++17)
-            extra_deps: clang-6.0
-            c_compiler: clang-6.0
-            cxx_compiler: clang++-6.0
-            cxx_standard: 17
-
-          - name: Clang-7
-            extra_deps: clang-7
-            c_compiler: clang-7
-            cxx_compiler: clang++-7
-            cxx_standard: 11
-
-          - name: Clang-7 (C++14)
-            extra_deps: clang-7
-            c_compiler: clang-7
-            cxx_compiler: clang++-7
-            cxx_standard: 14
-
-          - name: Clang-7 (C++17)
-            extra_deps: clang-7
-            c_compiler: clang-7
-            cxx_compiler: clang++-7
-            cxx_standard: 17
-
-          - name: Clang-8
-            extra_deps: clang-8
-            c_compiler: clang-8
-            cxx_compiler: clang++-8
-            cxx_standard: 11
-
-          - name: Clang-9
-            extra_deps: clang-9
-            c_compiler: clang-9
-            cxx_compiler: clang++-9
-            cxx_standard: 11
-
-          - name: Clang-10
-            extra_deps: clang-10
-            c_compiler: clang-10
-            cxx_compiler: clang++-10
-            cxx_standard: 11
-
-          - name: Clang-10 (C++20)
-            extra_deps: clang-10
-            c_compiler: clang-10
-            cxx_compiler: clang++-10
-            cxx_standard: 20
-
-          - name: Clang-11
-            extra_deps: clang-11
-            c_compiler: clang-11
-            cxx_compiler: clang++-11
-            cxx_standard: 11
-
-          - name: Clang-12
-            extra_deps: clang-12
-            c_compiler: clang-12
-            cxx_compiler: clang++-12
-            cxx_standard: 11
-
           - name: GCC-8
             extra_deps: g++-8
             c_compiler: gcc-8
@@ -158,18 +86,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: Clang-13
-            extra_deps: clang-13
-            c_compiler: clang-13
-            cxx_compiler: clang++-13
-            cxx_standard: 11
-
-          - name: Clang-14
-            extra_deps: clang-14
-            c_compiler: clang-14
-            cxx_compiler: clang++-14
-            cxx_standard: 11
-
           - name: Clang-15
             extra_deps: clang-15
             c_compiler: clang-15
