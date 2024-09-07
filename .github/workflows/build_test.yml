@@ -26,19 +26,17 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: GCC-8
-            extra_deps: g++-8
-            c_compiler: gcc-8
-            cxx_compiler: g++-8
-            cxx_flags: -ftrapv
-            cxx_standard: 11
+          - name: Clang-6.0 (C++17)
+            extra_deps: clang-6.0
+            c_compiler: clang-6.0
+            cxx_compiler: clang++-6.0
+            cxx_standard: 17
 
-          - name: GCC-8 (C++14)
-            extra_deps: g++-8
-            c_compiler: gcc-8
-            cxx_compiler: g++-8
-            cxx_flags: -ftrapv
-            cxx_standard: 14
+          - name: Clang-7 (C++17)
+            extra_deps: clang-7
+            c_compiler: clang-7
+            cxx_compiler: clang++-7
+            cxx_standard: 17
 
           - name: GCC-8 (C++17)
             extra_deps: g++-8
@@ -52,14 +50,14 @@ jobs:
             c_compiler: gcc-9
             cxx_compiler: g++-9
             cxx_flags: -ftrapv
-            cxx_standard: 11
+            cxx_standard: 17
 
           - name: GCC-10
             extra_deps: g++-10
             c_compiler: gcc-10
             cxx_compiler: g++-10
             cxx_flags: -ftrapv
-            cxx_standard: 11
+            cxx_standard: 17
 
     steps:
       - name: Harden Runner
@@ -86,11 +84,23 @@ jobs:
     strategy:
       matrix:
         include:
+          - name: Clang-13
+            extra_deps: clang-13
+            c_compiler: clang-13
+            cxx_compiler: clang++-13
+            cxx_standard: 17
+
+          - name: Clang-14
+            extra_deps: clang-14
+            c_compiler: clang-14
+            cxx_compiler: clang++-14
+            cxx_standard: 17
+
           - name: Clang-15
             extra_deps: clang-15
             c_compiler: clang-15
             cxx_compiler: clang++-15
-            cxx_standard: 11
+            cxx_standard: 17
 
           - name: Clang-15 (C++20)
             extra_deps: clang-15
@@ -112,7 +122,7 @@ jobs:
             c_compiler: gcc-11
             cxx_compiler: g++-11
             cxx_flags: -ftrapv
-            cxx_standard: 11
+            cxx_standard: 17
 
           - name: GCC-11 (C++20)
             extra_deps: g++-11
@@ -126,7 +136,7 @@ jobs:
             c_compiler: gcc-12
             cxx_compiler: g++-12
             cxx_flags: -ftrapv
-            cxx_standard: 11
+            cxx_standard: 17
 
           - name: GCC-12 (C++20)
             extra_deps: g++-12
