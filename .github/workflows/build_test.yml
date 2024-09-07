@@ -30,33 +30,35 @@ jobs:
             extra_deps: clang-6.0
             c_compiler: clang-6.0
             cxx_compiler: clang++-6.0
+            cxx_flags: -pthread
             cxx_standard: 17
 
           - name: Clang-7 (C++17)
             extra_deps: clang-7
             c_compiler: clang-7
             cxx_compiler: clang++-7
+            cxx_flags: -pthread
             cxx_standard: 17
 
           - name: GCC-8 (C++17)
             extra_deps: g++-8
             c_compiler: gcc-8
             cxx_compiler: g++-8
-            cxx_flags: -ftrapv
+            cxx_flags: -ftrapv -pthread
             cxx_standard: 17
 
           - name: GCC-9
             extra_deps: g++-9
             c_compiler: gcc-9
             cxx_compiler: g++-9
-            cxx_flags: -ftrapv
+            cxx_flags: -ftrapv -pthread
             cxx_standard: 17
 
           - name: GCC-10
             extra_deps: g++-10
             c_compiler: gcc-10
             cxx_compiler: g++-10
-            cxx_flags: -ftrapv
+            cxx_flags: -ftrapv -pthread
             cxx_standard: 17
 
     steps:
