@@ -503,6 +503,7 @@ int64_t DetectTargets() {
   if (has_xsave && has_osxsave) {
     fprintf(stderr, "OSXSAVE support detected\n");
 #if HWY_OS_APPLE
+    #pragma message "Compiling for macOS"
     // On macOS, check for AVX3 XSAVE support by checking that we are running on
     // macOS 12.2 or later and HasCpuFeature("hw.optional.avx512f") returns true
 
