@@ -227,6 +227,46 @@ HWY_INLINE constexpr uint64_t Bit(FeatureIndex index) {
   return 1ull << static_cast<size_t>(index);
 }
 
+static const char* X86FeatureNames[static_cast<size_t>(FeatureIndex::kSentinel)] = {
+  "SSE",
+  "SSE2",
+  "SSE3",
+  "SSSE3",
+
+  "SSE41",
+  "SSE42",
+  "CLMUL",
+  "AES",
+
+  "AVX",
+  "AVX2",
+  "F16C",
+  "FMA",
+  "LZCNT",
+  "BMI",
+  "BMI2",
+
+  "AVX512F",
+  "AVX512VL",
+  "AVX512CD",
+  "AVX512DQ",
+  "AVX512BW",
+  "AVX512FP16",
+  "AVX512BF16",
+
+  "VNNI",
+  "VPCLMULQDQ",
+  "VBMI",
+  "VBMI2",
+  "VAES",
+  "POPCNTDQ",
+  "BITALG",
+  "GFNI",
+
+  "AVX10",
+  "APX"
+};
+
 // Returns bit array of FeatureIndex from CPUID feature flags.
 uint64_t FlagsFromCPUID() {
   uint64_t flags = 0;  // return value
@@ -347,6 +387,13 @@ int64_t DetectTargets() {
   }
 
   const uint64_t flags = FlagsFromCPUID();
+
+  for (uint32_t i = 0; i < static_cast<uint32_t>(FeatureIndex::kSentinel); i++) {
+    if(flags & Bit(static_cast<FeatureIndex>(i))) {
+      fprintf(stderr, "Feature detected: %s\n", X86FeatureNames[i]);
+    }
+  }
+
   // Set target bit(s) if all their group's flags are all set.
   if ((flags & kGroupAVX3_SPR) == kGroupAVX3_SPR) {
     bits |= HWY_AVX3_SPR;
@@ -424,6 +471,7 @@ int64_t DetectTargets() {
   constexpr int64_t min_avx2 = HWY_AVX2 | (HWY_AVX2 - 1);
 
   if (has_xsave && has_osxsave) {
+    fprintf(stderr, "OSXSAVE support detected\n");
 #if HWY_OS_APPLE
     // On macOS, check for AVX3 XSAVE support by checking that we are running on
     // macOS 12.2 or later and HasCpuFeature("hw.optional.avx512f") returns true
@@ -466,6 +514,10 @@ int64_t DetectTargets() {
     const bool have_avx3_xsave_support =
         IsBitSet(xcr0, 5) && IsBitSet(xcr0, 6) && IsBitSet(xcr0, 7);
 #endif
+
+    if(have_avx3_xsave_support) {
+      fprintf(stderr, "AVX3 XSAVE support detected\n");
+    }
 
     // opmask, ZMM lo/hi
     if (!have_avx3_xsave_support) {
