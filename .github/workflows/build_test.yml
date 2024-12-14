@@ -68,3 +68,17 @@ jobs:
           export CTEST_PARALLEL_LEVEL=2
           CXXFLAGS="-msse4.2 -mpclmul -maes" cmake -G "Unix Makefiles" -DHWY_WARNINGS_ARE_ERRORS=ON -DCMAKE_CXX_STANDARD=17 -DHWY_ENABLE_CONTRIB=OFF -DHWY_TEST_STANDALONE=ON -B out .
           cmake --build out --target hwy_list_targets
+
+  cmake_macos_14:
+    name: Detect targets on macOS 14
+    runs-on: macos-14
+
+    steps:
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.0.0
+
+      - name: Build and detect targets
+        run: |
+          export CMAKE_BUILD_PARALLEL_LEVEL=2
+          export CTEST_PARALLEL_LEVEL=2
+          cmake -G "Unix Makefiles" -DHWY_WARNINGS_ARE_ERRORS=ON -DCMAKE_CXX_STANDARD=17 -DHWY_ENABLE_CONTRIB=OFF -DHWY_TEST_STANDALONE=ON -DCMAKE_OSX_ARCHITECTURES=x86_64 -B out .
+          cmake --build out --target hwy_list_targets
