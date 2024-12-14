@@ -267,6 +267,20 @@ static const char* X86FeatureNames[static_cast<size_t>(FeatureIndex::kSentinel)]
   "APX"
 };
 
+#if HWY_OS_APPLE
+static const char* X86MacOSCpuFeatureNames[] = {
+  "hw.optional.sse2",
+  "hw.optional.sse3",
+  "hw.optional.supplementalsse3",
+  "hw.optional.sse4_1",
+  "hw.optional.sse4_2",
+  "hw.optional.aes",
+  "hw.optional.avx1_0",
+  "hw.optional.avx2_0",
+  "hw.optional.avx512f"
+};
+#endif
+
 // Returns bit array of FeatureIndex from CPUID feature flags.
 uint64_t FlagsFromCPUID() {
   uint64_t flags = 0;  // return value
@@ -393,6 +407,16 @@ int64_t DetectTargets() {
       fprintf(stderr, "Feature detected: %s\n", X86FeatureNames[i]);
     }
   }
+
+#if HWY_OS_APPLE
+  const size_t num_of_macos_cpu_feature_names =
+   sizeof(X86MacOSCpuFeatureNames) / sizeof(X86MacOSCpuFeatureNames[0]);
+  for (size_t i = 0; i < num_of_macos_cpu_feature_names; i++) {
+    if(HasCpuFeature(X86MacOSCpuFeatureNames[i])) {
+      fprintf(stderr, "Feature detected: %s\n", X86MacOSCpuFeatureNames[i]);
+    }
+  }
+#endif
 
   // Set target bit(s) if all their group's flags are all set.
   if ((flags & kGroupAVX3_SPR) == kGroupAVX3_SPR) {
