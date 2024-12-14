@@ -416,6 +416,12 @@ int64_t DetectTargets() {
       fprintf(stderr, "Feature detected: %s\n", X86MacOSCpuFeatureNames[i]);
     }
   }
+
+  if (IsMacOs12_2OrLater()) {
+    fprintf(stderr, "Is running on macOS 12.2 or later\n");
+  } else {
+    fprintf(stderr, "Is running on macOS 12.1 or earlier\n");
+  }
 #endif
 
   // Set target bit(s) if all their group's flags are all set.
