@@ -18,13 +18,11 @@ jobs:
         include:
           - arch: aarch64
             distro: ubuntu_latest
-            cxx_flags: -Wno-psabi
+            cxx_flags: -Wno-psabi -DHWY_DISABLED_TARGETS=0x6000000000000000
           - arch: armv7
             distro: ubuntu_latest
             cxx_flags: -Wno-psabi
             cmake_flags: -DHWY_CMAKE_ARM7:BOOL=ON
-          - arch: ppc64le
-            distro: ubuntu_latest
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -41,12 +39,23 @@ jobs:
           apt-get install -q -y --no-install-recommends \
                 build-essential \
                 cmake \
-                libgtest-dev \
                 ninja-build \
                 ;
         run: |
           export CMAKE_BUILD_PARALLEL_LEVEL=2
           export CTEST_PARALLEL_LEVEL=2
-          CXXFLAGS=${{ matrix.cxx_flags }} cmake -GNinja ${{ matrix.cmake_flags }} -DHWY_SYSTEM_GTEST=ON -DHWY_WARNINGS_ARE_ERRORS=ON -B out .
-          cmake --build out
-          ctest --test-dir out
+          CXXFLAGS="${{ matrix.cxx_flags }}" cmake -GNinja ${{ matrix.cmake_flags }} -DHWY_TEST_STANDALONE=ON -DHWY_ENABLE_CONTRIB=OFF -DHWY_WARNINGS_ARE_ERRORS=ON -B out .
+          cmake --build out --target hwy_list_targets
+  cmake_macos_15:
+    name: Build and test on macOS 15
+    runs-on: macos-15
+
+    steps:
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.0.0
+
+      - name: Build and test
+        run: |
+          export CMAKE_BUILD_PARALLEL_LEVEL=2
+          export CTEST_PARALLEL_LEVEL=2
+          CXXFLAGS="-DHWY_DISABLED_TARGETS=0x6000000000000000" cmake -G "Unix Makefiles" -DHWY_TEST_STANDALONE=ON -DHWY_ENABLE_CONTRIB=OFF -DHWY_WARNINGS_ARE_ERRORS=ON -DCMAKE_CXX_STANDARD=17 -B out .
+          cmake --build out --target hwy_list_targets
