@@ -219,10 +219,10 @@ HWY_SVE_FOREACH_BF16_UNCONDITIONAL(HWY_SPECIALIZE, _, _)
   HWY_API HWY_SVE_V(BASE, BITS) NAME(HWY_SVE_V(BASE, BITS) v) { \
     return sv##OP##_##CHAR##BITS(v);                            \
   }
-#define HWY_SVE_RETV_ARGMV_M(BASE, CHAR, BITS, HALF, NAME, OP)             \
-  HWY_API HWY_SVE_V(BASE, BITS)                                            \
-      NAME(svbool_t m, HWY_SVE_V(BASE, BITS) a, HWY_SVE_V(BASE, BITS) b) { \
-    return sv##OP##_##CHAR##BITS##_m(b, m, a);                             \
+#define HWY_SVE_RETV_ARGMV_M(BASE, CHAR, BITS, HALF, NAME, OP)              \
+  HWY_API HWY_SVE_V(BASE, BITS)                                             \
+      NAME(HWY_SVE_V(BASE, BITS) no, svbool_t m, HWY_SVE_V(BASE, BITS) a) { \
+    return sv##OP##_##CHAR##BITS##_m(no, m, a);                             \
   }
 #define HWY_SVE_RETV_ARGMV(BASE, CHAR, BITS, HALF, NAME, OP)                \
   HWY_API HWY_SVE_V(BASE, BITS) NAME(svbool_t m, HWY_SVE_V(BASE, BITS) v) { \
@@ -885,8 +885,8 @@ HWY_SVE_FOREACH_I(HWY_SVE_RETV_ARGPV, SaturatedAbs, qabs)
 // ------------------------------ MaskedAbsOr
 HWY_SVE_FOREACH_IF(HWY_SVE_RETV_ARGMV_M, MaskedAbsOr, abs)
 
-// ------------------------------ MaskedAbsOrZero
-HWY_SVE_FOREACH_IF(HWY_SVE_RETV_ARGMV_Z, MaskedAbsOrZero, abs)
+// ------------------------------ MaskedAbs
+HWY_SVE_FOREACH_IF(HWY_SVE_RETV_ARGMV_Z, MaskedAbs, abs)
 
 // ================================================== ARITHMETIC
 
@@ -4976,21 +4976,6 @@ HWY_API V IfNegativeThenElse(V v, V yes, V no) {
   static_assert(IsSigned<TFromV<V>>(), "Only works for signed/float");
   return IfThenElse(IsNegative(v), yes, no);
 }
-
-// ------------------------------ AddLower
-
-#ifdef HWY_NATIVE_ADD_LOWER
-#undef HWY_NATIVE_ADD_LOWER
-#endif
-
-#define HWY_NATIVE_ADD_LOWER(BASE, CHAR, BITS, HALF, NAME, OP)           \
-  HWY_API HWY_SVE_V(BASE, BITS)                                          \
-      NAME(HWY_SVE_V(BASE, BITS) a, HWY_SVE_V(BASE, BITS) b) {           \
-    return sv##OP##_##CHAR##BITS##_m(svptrue_pat_b##BITS(SV_VL1), a, b); \
-  }
-
-HWY_SVE_FOREACH(HWY_NATIVE_ADD_LOWER, AddLower, add)
-#undef HWY_NATIVE_ADD_LOWER
 
 // ------------------------------ AverageRound (ShiftRight)
 
