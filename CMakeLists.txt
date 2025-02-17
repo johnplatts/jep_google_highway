@@ -439,8 +439,8 @@ else()
 endif()  # !MSVC
 
 if (XCODE)
-  set(HWY_XCODE_EXTRA_X86_64_CXXFLAGS "" CACHE STRING)
-  set(HWY_XCODE_EXTRA_ARM64_CXXFLAGS "" CACHE STRING)
+  set(HWY_XCODE_EXTRA_X86_64_CXXFLAGS "" CACHE STRING "Extra C++ compilation options for x86_64 with XCode")
+  set(HWY_XCODE_EXTRA_ARM64_CXXFLAGS "" CACHE STRING "Extra C++ compilation options for arm64 with XCode")
   set(XCODE_ATTRIBUTE_OTHER_CPLUSPLUSFLAGS[arch=x86_64] "$(inherited) ${HWY_XCODE_EXTRA_X86_64_CXXFLAGS}")
   set(XCODE_ATTRIBUTE_OTHER_CPLUSPLUSFLAGS[arch=arm64] "$(inherited) ${HWY_XCODE_EXTRA_ARM64_CXXFLAGS}")
 endif()
