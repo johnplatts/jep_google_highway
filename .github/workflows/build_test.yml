@@ -65,7 +65,7 @@ jobs:
           COPY . /hwy_build_and_test
           WORKDIR /hwy_build_and_test
           RUN DEBIAN_FRONTEND=noninteractive apt-get update
-          RUN DEBIAN_FRONTEND=noninteractive apt-get install -y cmake git ${HWY_EXTRA_BUILD_DEPS}
+          RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends build-essential cmake git ${HWY_EXTRA_BUILD_DEPS}
           RUN useradd -m -U hwy_build
           RUN chown -R hwy_build:hwy_build /hwy_build_and_test
           USER hwy_build
