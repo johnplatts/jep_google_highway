@@ -55,6 +55,8 @@ jobs:
           cmake --build out
           ctest --test-dir out
           EOF
+          echo "Build script:"
+          cat build_and_test_hwy_in_container.sh 
 
       - name: Create Dockerfile
         run: |
@@ -65,7 +67,7 @@ jobs:
           COPY . /hwy_build_and_test
           WORKDIR /hwy_build_and_test
           RUN DEBIAN_FRONTEND=noninteractive apt-get update
-          RUN DEBIAN_FRONTEND=noninteractive apt-get -y install ${HWY_EXTRA_BUILD_DEPS}
+          RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ${HWY_EXTRA_BUILD_DEPS}
           RUN useradd -m -U hwy_build
           RUN chown -R hwy_build:hwy_build /hwy_build_and_test
           USER hwy_build
@@ -82,4 +84,4 @@ jobs:
 
       - name: Build and test inside Docker container
         run: |
-          docker run --rm hwy-build-and-test:latest /bin/bash ./build_and_test_hwy_in_container.sh
+          docker run --rm hwy-build-and-test:latest /bin/sh /hwy_build_and_test/build_and_test_hwy_in_container.sh
