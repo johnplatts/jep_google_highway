@@ -34,6 +34,7 @@ jobs:
             cxx_standard: 17
             extra_deps: g++-8
           - name: Clang-6.0 (C++17)
+            docker_image: ubuntu:20.04
             extra_deps: clang-6.0
             c_compiler: clang-6.0
             cxx_compiler: clang++-6.0
