@@ -42,22 +42,29 @@ jobs:
     steps:
       - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.0.0
 
-      - name: Create Dockerfile
+      - name: Create build and test script
         run: |
-          cat <<EOF > build_and_test_hwy_in_container.sh
-          cd /hwy_build_and_test
-          export CMAKE_BUILD_PARALLEL_LEVEL=2
-          export CTEST_PARALLEL_LEVEL=2
-          CXXFLAGS="${{ matrix.cxx_flags }}" CC=${{ matrix.c_compiler }} CXX=${{ matrix.cxx_compiler }} cmake -DHWY_WARNINGS_ARE_ERRORS=ON -DCMAKE_CXX_STANDARD=${{ matrix.cxx_standard }} ${{ matrix.extra_cmake_flags }} -B out .
+          HWY_BUILD_CXXFLAGS="${{ matrix.cxx_flags }}"
+          HWY_BUILD_CC=${{ matrix.c_compiler }}
+          HWY_BUILD_CXX=${{ matrix.cxx_compiler }}
+          HWY_BUILD_CXX_STANDARD=${{ matrix.cxx_standard }}
+          HWY_BUILD_EXTRA_CMAKE_FLAGS="${{ matrix.extra_cmake_flags }}"
+          echo > build_and_test_hwy_in_container.sh << EOF
+          CXXFLAGS="${HWY_BUILD_CXXFLAGS}" CC=${HWY_BUILD_CC} CXX=${HWY_BUILD_CXX} cmake -DHWY_WARNINGS_ARE_ERRORS=ON -DCMAKE_CXX_STANDARD=${HWY_BUILD_CXX_STANDARD} ${HWY_BUILD_EXTRA_CMAKE_FLAGS} -B out .
           cmake --build out
           ctest --test-dir out
           EOF
-          cat <<EOF > Dockerfile.hwy-build-and-test
-          FROM ${{ matrix.docker_image }}
+
+      - name: Create Dockerfile
+        run: |
+          HWY_BASE_DOCKER_IMAGE=${{ matrix.docker_image }}
+          HWY_EXTRA_BUILD_DEPS=${{ matrix.extra_deps }}
+          cat > Dockerfile.hwy-build-and-test << EOF
+          FROM ${HWY_BASE_DOCKER_IMAGE}
           COPY . /hwy_build_and_test
           WORKDIR /hwy_build_and_test
           RUN apt-get update
-          RUN apt-get install ${{ matrix.extra_deps }}
+          RUN apt-get install ${HWY_EXTRA_BUILD_DEPS}
           RUN useradd -m -U hwy_build
           RUN chown -R hwy_build:hwy_build /hwy_build_and_test
           USER hwy_build
@@ -72,6 +79,6 @@ jobs:
           load: true
           tags: hwy-build-and-test:latest
 
-      - name: Build and test
+      - name: Build and test inside Docker container
         run: |
           docker run --rm hwy-build-and-test:latest /bin/bash ./build_and_test_hwy_in_container.sh
