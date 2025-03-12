@@ -53,7 +53,7 @@ jobs:
           HWY_BUILD_CXX_STANDARD=${{ matrix.cxx_standard }}
           HWY_BUILD_EXTRA_CMAKE_FLAGS="${{ matrix.extra_cmake_flags }}"
           cat > build_and_test_hwy_in_container.sh << EOF
-          CXXFLAGS="${HWY_BUILD_CXXFLAGS}" CC=${HWY_BUILD_CC} CXX=${HWY_BUILD_CXX} cmake -DHWY_WARNINGS_ARE_ERRORS=ON -DCMAKE_CXX_STANDARD=${HWY_BUILD_CXX_STANDARD} ${HWY_BUILD_EXTRA_CMAKE_FLAGS} -B out .
+          CXXFLAGS="${HWY_BUILD_CXXFLAGS}" CC=${HWY_BUILD_CC} CXX=${HWY_BUILD_CXX} cmake -DHWY_WARNINGS_ARE_ERRORS=ON -DCMAKE_CXX_STANDARD=${HWY_BUILD_CXX_STANDARD} ${HWY_BUILD_EXTRA_CMAKE_FLAGS} -DHWY_SYSTEM_GTEST=ON -B out .
           cmake --build out
           ctest --test-dir out
           EOF
@@ -67,7 +67,7 @@ jobs:
           COPY . /hwy_build_and_test
           WORKDIR /hwy_build_and_test
           RUN DEBIAN_FRONTEND=noninteractive apt-get update
-          RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends build-essential cmake git ${HWY_EXTRA_BUILD_DEPS}
+          RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends build-essential cmake libgtest-dev ${HWY_EXTRA_BUILD_DEPS}
           RUN useradd -m -U hwy_build
           RUN chown -R hwy_build:hwy_build /hwy_build_and_test
           USER hwy_build
