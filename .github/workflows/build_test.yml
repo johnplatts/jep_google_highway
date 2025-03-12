@@ -29,16 +29,18 @@ jobs:
         include:
           - name: GCC-8
             docker_image: ubuntu:20.04
+            extra_deps: g++-8
             c_compiler: gcc-8
             cxx_compiler: g++-8
             cxx_standard: 17
-            extra_deps: g++-8
+            cxx_flags: -march=nehalem -maes -mpclmul -DHWY_COMPILE_ONLY_STATIC=1
           - name: Clang-6.0 (C++17)
             docker_image: ubuntu:20.04
             extra_deps: clang-6.0
             c_compiler: clang-6.0
             cxx_compiler: clang++-6.0
             cxx_standard: 17
+            cxx_flags: -march=nehalem -maes -mpclmul -DHWY_COMPILE_ONLY_STATIC=1
 
     steps:
       - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.0.0
