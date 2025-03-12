@@ -50,13 +50,11 @@ jobs:
           HWY_BUILD_CXX=${{ matrix.cxx_compiler }}
           HWY_BUILD_CXX_STANDARD=${{ matrix.cxx_standard }}
           HWY_BUILD_EXTRA_CMAKE_FLAGS="${{ matrix.extra_cmake_flags }}"
-          echo > build_and_test_hwy_in_container.sh << EOF
+          cat > build_and_test_hwy_in_container.sh << EOF
           CXXFLAGS="${HWY_BUILD_CXXFLAGS}" CC=${HWY_BUILD_CC} CXX=${HWY_BUILD_CXX} cmake -DHWY_WARNINGS_ARE_ERRORS=ON -DCMAKE_CXX_STANDARD=${HWY_BUILD_CXX_STANDARD} ${HWY_BUILD_EXTRA_CMAKE_FLAGS} -B out .
           cmake --build out
           ctest --test-dir out
           EOF
-          echo "Build script:"
-          cat build_and_test_hwy_in_container.sh 
 
       - name: Create Dockerfile
         run: |
