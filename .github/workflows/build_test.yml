@@ -191,6 +191,28 @@ jobs:
             cxx_flags: -DHWY_DISABLED_TARGETS=0x58
             cxx_standard: 23
 
+          - name: Clang-19
+            extra_deps: clang-19
+            c_compiler: clang-19
+            cxx_compiler: clang++-19
+            # Disable AVX3_SPR/AVX3_ZEN4 targets in GitHub workflow build with
+            # Clang 16 or later to work around crashes that occur with Clang 16
+            # or later when some of the Google Highway tests are compiled with
+            # all x86 targets enabled
+            cxx_flags: -DHWY_DISABLED_TARGETS=0x58
+            cxx_standard: 17
+
+          - name: Clang-19 (C++23)
+            extra_deps: clang-19
+            c_compiler: clang-19
+            cxx_compiler: clang++-19
+            # Disable AVX3_SPR/AVX3_ZEN4 targets in GitHub workflow build with
+            # Clang 16 or later to work around crashes that occur with Clang 16
+            # or later when some of the Google Highway tests are compiled with
+            # all x86 targets enabled
+            cxx_flags: -DHWY_DISABLED_TARGETS=0x58
+            cxx_standard: 23
+
           - name: GCC-13
             extra_deps: g++-13
             c_compiler: gcc-13
@@ -202,6 +224,20 @@ jobs:
             extra_deps: g++-13
             c_compiler: gcc-13
             cxx_compiler: g++-13
+            cxx_flags: -ftrapv
+            cxx_standard: 23
+
+          - name: GCC-14
+            extra_deps: g++-14
+            c_compiler: gcc-14
+            cxx_compiler: g++-14
+            cxx_flags: -ftrapv
+            cxx_standard: 17
+
+          - name: GCC-14 (C++23)
+            extra_deps: g++-14
+            c_compiler: gcc-14
+            cxx_compiler: g++-14
             cxx_flags: -ftrapv
             cxx_standard: 23
 
