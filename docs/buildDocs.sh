@@ -23,7 +23,7 @@ python3_venv_dir=`mktemp -d`
 
 python3 -m venv "$python3_venv_dir"
 
-"${python3_venv_dir}/bin/python" -m pip install --upgrade rinohtype pygments sphinx-rtd-theme sphinx-tabs docutils==0.16 pandoc
+"${python3_venv_dir}/bin/python" -m pip install --upgrade rinohtype pygments sphinx sphinx-rtd-theme sphinx-tabs stemmer GitPython docutils==0.16 pandoc
 "${python3_venv_dir}/bin/python" -m pip list
 
 # get rid of all these safe dir warnings
@@ -45,7 +45,9 @@ export REPO_NAME="${GITHUB_REPOSITORY##*/}"
 ##############
 # BUILD DOCS #
 ##############
-  
+
+export SPHINXBUILD="${python3_venv_dir}/bin/sphinx-build"
+
 # first, cleanup any old builds' static assets
 make -C docs clean
 
@@ -81,7 +83,7 @@ for current_version in ${versions}; do
       echo "INFO: Building for ${current_language}"
   
       # HTML #
-      "${python3_venv_dir}/bin/sphinx-build" -b html docs/ docs/_build/html/${current_language}/${current_version} -D language="${current_language}"
+      "$SPHINXBUILD" -b html docs/ docs/_build/html/${current_language}/${current_version} -D language="${current_language}"
     
       # copy the static assets produced by the above build into our docroot
       rsync -av "docs/_build/html/" "${docroot}/"
