@@ -813,7 +813,7 @@ class Stats {
 
  private:
   static uint64_t Elapsed(uint64_t t0, uint64_t t1, int line) {
-    if constexpr (HWY_IS_DEBUG_BUILD) {
+    HWY_IF_CONSTEXPR (HWY_IS_DEBUG_BUILD) {
       HWY_DASSERT(t0 != 0);
       if (t0 > t1)
         Abort(__FILE__, line, "t0 %g > t1 %g", static_cast<double>(t0),
