@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         compiler: [Clang-15, GCC-12]
-        cxx_standard: [11]
+        cxx_standard: [17]
         include:
           - compiler: Clang-15
             extra_deps: clang-15
