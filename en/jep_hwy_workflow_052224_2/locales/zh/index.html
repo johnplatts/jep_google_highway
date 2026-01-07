@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Highway, 为C++提供可移植的SIMD原语 &mdash; HIGHWAY nightly documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/toggle.css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/logo-32x32.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/js/toggle.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            HIGHWAY
+              <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                jep_hwy_workflow_052224_2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">Efficient and performance-portable vector software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_reference.html">API synopsis / quick reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../design_philosophy.html">Design philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../impl_details.html">Highway implementation details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release_testing_process.html">Release testing process</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">HIGHWAY</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Highway, 为C++提供可移植的SIMD原语</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/google/jep_google_highway/blob/master/docs/locales/zh/index.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="highway-c-simd">
+<h1>Highway, 为C++提供可移植的SIMD原语<a class="headerlink" href="#highway-c-simd" title="Permalink to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Apache 2.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Read the Docs</span>
+      
+      
+     <span class="fa fa-element">
+     <input class="container_toggle" type="checkbox" id="switch" name="mode">
+     <label for="switch"></label>
+     </span>
+      
+      v: jep_hwy_workflow_052224_2
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      
+      <dl>
+        <dt>Languages</dt>
+        
+           <strong> 
+          <dd><a href="/jep_google_highway/en/jep_hwy_workflow_052224_2/">en</a></dd>
+           </strong> 
+        
+          
+          <dd><a href="/jep_google_highway/zh/jep_hwy_workflow_052224_2/">zh</a></dd>
+          
+        
+      </dl>
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+          
+          <dd><a href="/jep_google_highway/en/cc_shift_fixes_020525/">cc_shift_fixes_020525</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/clang_hwy_map_dispatch_fix_051424/">clang_hwy_map_dispatch_fix_051424</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_aarch64_workflow_031125/">hwy_aarch64_workflow_031125</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_averageround_061824/">hwy_averageround_061824</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_averageround_enh_022525/">hwy_averageround_enh_022525</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_avx10_043025/">hwy_avx10_043025</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_avx10_120124/">hwy_avx10_120124</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_avx10_2_conv_enh_061225/">hwy_avx10_2_conv_enh_061225</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_avx10_2_sum_mul_quad_accum_enh_101625/">hwy_avx10_2_sum_mul_quad_accum_enh_101625</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_avx10_sum_adj_abs_diff_enh_101625/">hwy_avx10_sum_adj_abs_diff_enh_101625</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_avx3_compress_fix_031125/">hwy_avx3_compress_fix_031125</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_avx3_getexp_fix_061225/">hwy_avx3_getexp_fix_061225</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_avx3_spr_clang19_fp16_081024/">hwy_avx3_spr_clang19_fp16_081024</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_bench_sort_fix_111624/">hwy_bench_sort_fix_111624</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_bigendian_bitshuffle_fix_060324/">hwy_bigendian_bitshuffle_fix_060324</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_bitpack_unroller_fix_051024/">hwy_bitpack_unroller_fix_051024</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_bitshuffle_050324/">hwy_bitshuffle_050324</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_ceil_floor_int_062824/">hwy_ceil_floor_int_062824</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_clang_target_pragma_warning_fix_101325/">hwy_clang_target_pragma_warning_fix_101325</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_cmake4_fix_062425/">hwy_cmake4_fix_062425</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_cmake_cxx17_051624/">hwy_cmake_cxx17_051624</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_compile_fix_103024/">hwy_compile_fix_103024</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_cxx11_dispatch_fix_051524/">hwy_cxx11_dispatch_fix_051524</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_cxx11_thread_pool_fix_100625/">hwy_cxx11_thread_pool_fix_100625</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_docker_build_031225/">hwy_docker_build_031225</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_docs_pages_workflow_fix_072925/">hwy_docs_pages_workflow_fix_072925</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_docs_pages_workflow_fix_073025/">hwy_docs_pages_workflow_fix_073025</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_enable_emu128_on_loongarch_031125/">hwy_enable_emu128_on_loongarch_031125</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_exp2_enh_061024/">hwy_exp2_enh_061024</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_f16_clang_op_fix_081524/">hwy_f16_clang_op_fix_081524</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_gcc12_x86_f2i_fix_052024/">hwy_gcc12_x86_f2i_fix_052024</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_gcc13_convertscalarto_fix_042925/">hwy_gcc13_convertscalarto_fix_042925</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_gcc15_s390x_fix_120525/">hwy_gcc15_s390x_fix_120525</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_gcc8_topology_fix_050324/">hwy_gcc8_topology_fix_050324</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_gcc9_fix_011725/">hwy_gcc9_fix_011725</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_gcc_fix_092725/">hwy_gcc_fix_092725</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_gcc_sort_warning_fix_071624/">hwy_gcc_sort_warning_fix_071624</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_get_exp_enh_013125/">hwy_get_exp_enh_013125</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_github_workflow_120325/">hwy_github_workflow_120325</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_i8mm_enh_101625/">hwy_i8mm_enh_101625</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_i8mm_enh_101625_with_macos_workflow/">hwy_i8mm_enh_101625_with_macos_workflow</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_icx_detect_fix_052324/">hwy_icx_detect_fix_052324</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_interleaved_test_fix_051524/">hwy_interleaved_test_fix_051524</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_is_integer_fix_080724/">hwy_is_integer_fix_080724</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_lasx_promote_fix_060525/">hwy_lasx_promote_fix_060525</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_lsx_lasx_enh_060225/">hwy_lsx_lasx_enh_060225</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_macos_a64_051024_with_macos_workflow/">hwy_macos_a64_051024_with_macos_workflow</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_macos_a64_build_021725/">hwy_macos_a64_build_021725</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_macos_a64_dispatch_051024/">hwy_macos_a64_dispatch_051024</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_macos_a64_dispatch_052224_with_workflow/">hwy_macos_a64_dispatch_052224_with_workflow</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_macos_a64_fix/">hwy_macos_a64_fix</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_macos_a64_fix_with_workflow/">hwy_macos_a64_fix_with_workflow</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_macos_a64_workflow_021525/">hwy_macos_a64_workflow_021525</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_macos_arm_dispatch_050824/">hwy_macos_arm_dispatch_050824</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_macos_target_detection_041424_with_workflow/">hwy_macos_target_detection_041424_with_workflow</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_macos_workflow_050824/">hwy_macos_workflow_050824</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_macos_workflow_100825/">hwy_macos_workflow_100825</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_macos_workflow_101325/">hwy_macos_workflow_101325</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_map_dispatch_fix_051424/">hwy_map_dispatch_fix_051424</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_min_max_enh_061225/">hwy_min_max_enh_061225</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_min_max_mag_101024/">hwy_min_max_mag_101024</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_msvc2019_threadpool_fix_050925/">hwy_msvc2019_threadpool_fix_050925</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_msvc_dyn_dispatch_fix_050925/">hwy_msvc_dyn_dispatch_fix_050925</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_mul_by_pow2_enh_010626/">hwy_mul_by_pow2_enh_010626</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_mul_flt_by_pow2_071624/">hwy_mul_flt_by_pow2_071624</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_ndk_avx10_2_fix_083125/">hwy_ndk_avx10_2_fix_083125</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_nearestint_053024/">hwy_nearestint_053024</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_neon_arith_fix_062625/">hwy_neon_arith_fix_062625</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_neon_bf16_sumofmulquad_061224/">hwy_neon_bf16_sumofmulquad_061224</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_neon_ppc_undef_052224/">hwy_neon_ppc_undef_052224</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_ostream_op_fix_081324/">hwy_ostream_op_fix_081324</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_pairwise_add_enh_013025/">hwy_pairwise_add_enh_013025</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_popcount_enh_111925/">hwy_popcount_enh_111925</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_ppc32_fix_072324/">hwy_ppc32_fix_072324</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_ppc_gcc15_fix_011725/">hwy_ppc_gcc15_fix_011725</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_ppc_timer_fix_062625/">hwy_ppc_timer_fix_062625</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_print_compiler_fix_071025/">hwy_print_compiler_fix_071025</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_reduce_enh_011725/">hwy_reduce_enh_011725</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_rounding_shr_062124/">hwy_rounding_shr_062124</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_rvv_cmake_fix_120224/">hwy_rvv_cmake_fix_120224</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_rvv_concat_fix_123124/">hwy_rvv_concat_fix_123124</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_rvv_detect_fix_043024/">hwy_rvv_detect_fix_043024</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_rvv_detect_fix_043024_2/">hwy_rvv_detect_fix_043024_2</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_rvv_detect_fix_051324/">hwy_rvv_detect_fix_051324</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_rvv_dispatch_fix_060525/">hwy_rvv_dispatch_fix_060525</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_rvv_fix_060525/">hwy_rvv_fix_060525</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_rvv_flt_fix_051324/">hwy_rvv_flt_fix_051324</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_rvv_tuple_120224/">hwy_rvv_tuple_120224</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_setmask_081225/">hwy_setmask_081225</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_sort_test_compile_fix_100124/">hwy_sort_test_compile_fix_100124</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_sse2_u16_minmax_enh_103024/">hwy_sse2_u16_minmax_enh_103024</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_stream_load_032924/">hwy_stream_load_032924</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_sve_detect_enh_012925/">hwy_sve_detect_enh_012925</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_sve_detect_enh_012925_with_workflow/">hwy_sve_detect_enh_012925_with_workflow</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_sve_loadmaskbits_fix_031125/">hwy_sve_loadmaskbits_fix_031125</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_sve_makemask_fix_101225/">hwy_sve_makemask_fix_101225</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_sve_minmax_fix_061325/">hwy_sve_minmax_fix_061325</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_sve_truncatestore_fix_081225/">hwy_sve_truncatestore_fix_081225</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_targets_test_fix_051524/">hwy_targets_test_fix_051524</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_test_alloc_assert_032924/">hwy_test_alloc_assert_032924</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_test_build_fix_051225/">hwy_test_build_fix_051225</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_test_demote_to_fix_061225/">hwy_test_demote_to_fix_061225</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_test_enh_090524/">hwy_test_enh_090524</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_test_enh_090524_standalone_workflow/">hwy_test_enh_090524_standalone_workflow</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_test_standalone_fix_111624/">hwy_test_standalone_fix_111624</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_thread_pool_fix_100525/">hwy_thread_pool_fix_100525</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_threadpool_fix_031125/">hwy_threadpool_fix_031125</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_threads_fix_062425/">hwy_threads_fix_062425</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_topology_fix_050324/">hwy_topology_fix_050324</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_transform_test_fix_061024/">hwy_transform_test_fix_061024</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_vqsort_fix_101425/">hwy_vqsort_fix_101425</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_wasm_emu256_f64_081224/">hwy_wasm_emu256_f64_081224</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_win32_build_fix_022525/">hwy_win32_build_fix_022525</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_win32_fix_081225/">hwy_win32_fix_081225</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_workflow_031325/">hwy_workflow_031325</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_workflow_031325_2/">hwy_workflow_031325_2</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_workflow_050624/">hwy_workflow_050624</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_workflow_062625/">hwy_workflow_062625</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_workflow_120325/">hwy_workflow_120325</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_workflow_120325_2/">hwy_workflow_120325_2</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_x86_clang22_bf16_102425/">hwy_x86_clang22_bf16_102425</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_x86_feature_detect_121424/">hwy_x86_feature_detect_121424</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_z14_clang_fix_090324/">hwy_z14_clang_fix_090324</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_z14_extractm_051314/">hwy_z14_extractm_051314</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/jep_hwy_build_workflow_011725/">jep_hwy_build_workflow_011725</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/jep_hwy_fixes_workflow_051524/">jep_hwy_fixes_workflow_051524</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/jep_hwy_multiarch_only_workflow_072624/">jep_hwy_multiarch_only_workflow_072624</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/jep_hwy_ubuntu2204_workflow_061124/">jep_hwy_ubuntu2204_workflow_061124</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/jep_hwy_ubuntu2404_workflow_061124/">jep_hwy_ubuntu2404_workflow_061124</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/jep_hwy_ubuntu2404_workflow_061124_2/">jep_hwy_ubuntu2404_workflow_061124_2</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/jep_hwy_workflow_052224/">jep_hwy_workflow_052224</a></dd>
+          
+        
+           <strong> 
+          <dd><a href="/jep_google_highway/en/jep_hwy_workflow_052224_2/">jep_hwy_workflow_052224_2</a></dd>
+           </strong> 
+        
+          
+          <dd><a href="/jep_google_highway/en/master/">master</a></dd>
+          
+        
+      </dl>
+      
+      
+      <dl>
+        <dt>Downloads</dt>
+        
+          <dd><a href="/jep_google_highway/en/jep_hwy_workflow_052224_2/jep_google_highway_en_jep_hwy_workflow_052224_2.epub">epub</a></dd>
+        
+      </dl>
+      
+      
+      <hr/>
+      Free document hosting provided by <a href="https://pages.github.com/">GitHub Pages</a>.
+ 
+    </div>
+  </div>
+
+ <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>
