@@ -101,6 +101,47 @@ void PrintHave() {
           HWY_HAVE_CONSTEXPR_LANES, HWY_HAVE_RUNTIME_DISPATCH, HWY_HAVE_AUXV,
           HWY_HAVE_SCALAR_F16_TYPE, HWY_HAVE_SCALAR_F16_OPERATORS,
           HWY_HAVE_SCALAR_BF16_TYPE, HWY_HAVE_SCALAR_BF16_OPERATORS);
+
+#if HWY_ARCH_ARM
+
+#if defined(__ARM_FEATURE_AES)
+  constexpr int kArmAesCompilerFlagEnabled = 1;
+#else
+  constexpr int kArmAesCompilerFlagEnabled = 0;
+#endif
+
+#if defined(__ARM_FEATURE_FP16_VECTOR_ARITHMETIC)
+  constexpr int kArmFP16CompilerFlagEnabled = 1;
+#else
+  constexpr int kArmFP16CompilerFlagEnabled = 0;
+#endif
+
+#if defined(__ARM_FEATURE_DOTPROD)
+  constexpr int kArmDotProdCompilerFlagEnabled = 1;
+#else
+  constexpr int kArmDotProdCompilerFlagEnabled = 0;
+#endif
+
+#if defined(__ARM_FEATURE_BF16_VECTOR_ARITHMETIC)
+  constexpr int kArmBF16CompilerFlagEnabled = 1;
+#else
+  constexpr int kArmBF16CompilerFlagEnabled = 0;
+#endif
+
+#if defined(__ARM_FEATURE_MATMUL_INT8)
+  constexpr int kArmI8MMCompilerFlagEnabled = 1;
+#else
+  constexpr int kArmI8MMCompilerFlagEnabled = 0;
+#endif
+
+  fprintf(
+      stderr,
+      "aes_compiler_flag: %d, f16_compiler_flag: %d, dotprod_compiler_flag: "
+      "%d,\nbf16_compiler_flag: %d, i8mm_compiler_flag: %d\n",
+      kArmAesCompilerFlagEnabled, kArmFP16CompilerFlagEnabled,
+      kArmDotProdCompilerFlagEnabled, kArmBF16CompilerFlagEnabled,
+      kArmI8MMCompilerFlagEnabled);
+#endif
 }
 
 void PrintTargets(const char* msg, int64_t targets) {
