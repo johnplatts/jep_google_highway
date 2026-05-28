@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Release testing process &mdash; HIGHWAY nightly documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/toggle.css" />
+
+  
+    <link rel="shortcut icon" href="_static/logo-32x32.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Highway implementation details" href="impl_details.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            HIGHWAY
+              <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                hwy_gcc_sort_warning_fix_071624
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">Efficient and performance-portable vector software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_reference.html">API synopsis / quick reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design_philosophy.html">Design philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="impl_details.html">Highway implementation details</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Release testing process</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#windows-x86-host">Windows x86 host</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#linux-x86-host">Linux x86 host</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-updates">Version updates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#signing-the-release">Signing the release</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">HIGHWAY</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Release testing process</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/google/jep_google_highway/blob/master/docs/release_testing_process.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="release-testing-process">
+<h1>Release testing process<a class="headerlink" href="#release-testing-process" title="Permalink to this heading"></a></h1>
+<p>We run the following before a release:</p>
+<div class="section" id="windows-x86-host">
+<h2>Windows x86 host<a class="headerlink" href="#windows-x86-host" title="Permalink to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run_tests</span><span class="o">.</span><span class="n">bat</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="linux-x86-host">
+<h2>Linux x86 host<a class="headerlink" href="#linux-x86-host" title="Permalink to this heading"></a></h2>
+<p>Clang, GCC; Arm, PPC cross-compile: <code class="docutils literal notranslate"><span class="pre">./run_tests.sh</span></code></p>
+<p>Manual test of WASM and WASM_EMU256 targets.</p>
+<p>Check libjxl build actions at
+<a class="reference external" href="https://github.com/libjxl/libjxl/pull/2269">https://github.com/libjxl/libjxl/pull/2269</a>. (As of 2025-08-14 this is
+currently paused and requires a token update)</p>
+</div>
+<div class="section" id="version-updates">
+<h2>Version updates<a class="headerlink" href="#version-updates" title="Permalink to this heading"></a></h2>
+<p>Prepend to debian/changelog and update mentions of the current version
+in:</p>
+<ul class="simple">
+<li><p>base.h</p></li>
+<li><p>CMakeLists.txt</p></li>
+<li><p>meson.build</p></li>
+<li><p>MODULE.bazel</p></li>
+<li><p>g3doc/faq.md</p></li>
+</ul>
+</div>
+<div class="section" id="signing-the-release">
+<h2>Signing the release<a class="headerlink" href="#signing-the-release" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">archive</span> <span class="pre">--prefix=highway-X.Y.Z/</span> <span class="pre">-o</span> <span class="pre">highway-X.Y.Z.tar.gz</span> <span class="pre">X.Y.Z</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gpg</span> <span class="pre">--armor</span> <span class="pre">--detach-sign</span> <span class="pre">highway-X.Y.Z.tar.gz</span></code></p></li>
+<li><p>Edit release and attach the resulting <code class="docutils literal notranslate"><span class="pre">highway-X.Y.Z.tar.gz.asc</span></code>
+and .gz.</p></li>
+</ul>
+<p>(See <a class="reference external" href="https://wiki.debian.org/Creating%20signed%20GitHub%20releases">https://wiki.debian.org/Creating%20signed%20GitHub%20releases</a> and
+to obtain the key, search hkps://keys.openpgp.org for janwas&#64;google.com
+or since 1.3.0 jan.wassenberg&#64;gmail.com)</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="impl_details.html" class="btn btn-neutral float-left" title="Highway implementation details" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Apache 2.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Read the Docs</span>
+      
+      
+     <span class="fa fa-element">
+     <input class="container_toggle" type="checkbox" id="switch" name="mode">
+     <label for="switch"></label>
+     </span>
+      
+      v: hwy_gcc_sort_warning_fix_071624
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      
+      <dl>
+        <dt>Languages</dt>
+        
+           <strong> 
+          <dd><a href="/jep_google_highway/en/hwy_gcc_sort_warning_fix_071624/">en</a></dd>
+           </strong> 
+        
+          
+          <dd><a href="/jep_google_highway/zh/hwy_gcc_sort_warning_fix_071624/">zh</a></dd>
+          
+        
+      </dl>
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+          
+          <dd><a href="/jep_google_highway/en/cc_shift_fixes_020525/">cc_shift_fixes_020525</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/clang_hwy_map_dispatch_fix_051424/">clang_hwy_map_dispatch_fix_051424</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_aarch64_workflow_031125/">hwy_aarch64_workflow_031125</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_averageround_061824/">hwy_averageround_061824</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_averageround_enh_022525/">hwy_averageround_enh_022525</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_avx10_043025/">hwy_avx10_043025</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_avx10_120124/">hwy_avx10_120124</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_avx10_2_conv_enh_061225/">hwy_avx10_2_conv_enh_061225</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_avx10_2_sum_mul_quad_accum_enh_101625/">hwy_avx10_2_sum_mul_quad_accum_enh_101625</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_avx10_sum_adj_abs_diff_enh_101625/">hwy_avx10_sum_adj_abs_diff_enh_101625</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_avx3_compress_fix_031125/">hwy_avx3_compress_fix_031125</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_avx3_getexp_fix_061225/">hwy_avx3_getexp_fix_061225</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_avx3_spr_clang19_fp16_081024/">hwy_avx3_spr_clang19_fp16_081024</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_bench_sort_fix_111624/">hwy_bench_sort_fix_111624</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_bigendian_bitshuffle_fix_060324/">hwy_bigendian_bitshuffle_fix_060324</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_bitpack_unroller_fix_051024/">hwy_bitpack_unroller_fix_051024</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_bitshuffle_050324/">hwy_bitshuffle_050324</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_ceil_floor_int_062824/">hwy_ceil_floor_int_062824</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_clang_target_pragma_warning_fix_101325/">hwy_clang_target_pragma_warning_fix_101325</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_cmake4_fix_062425/">hwy_cmake4_fix_062425</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_cmake_cxx17_051624/">hwy_cmake_cxx17_051624</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_compile_fix_103024/">hwy_compile_fix_103024</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_cxx11_dispatch_fix_051524/">hwy_cxx11_dispatch_fix_051524</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_cxx11_thread_pool_fix_100625/">hwy_cxx11_thread_pool_fix_100625</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_docker_build_031225/">hwy_docker_build_031225</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_docs_pages_workflow_fix_072925/">hwy_docs_pages_workflow_fix_072925</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_docs_pages_workflow_fix_073025/">hwy_docs_pages_workflow_fix_073025</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_enable_emu128_on_loongarch_031125/">hwy_enable_emu128_on_loongarch_031125</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_exp2_enh_061024/">hwy_exp2_enh_061024</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_f16_clang_op_fix_081524/">hwy_f16_clang_op_fix_081524</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_gcc12_x86_f2i_fix_052024/">hwy_gcc12_x86_f2i_fix_052024</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_gcc13_convertscalarto_fix_042925/">hwy_gcc13_convertscalarto_fix_042925</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_gcc15_s390x_fix_120525/">hwy_gcc15_s390x_fix_120525</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_gcc8_topology_fix_050324/">hwy_gcc8_topology_fix_050324</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_gcc9_fix_011725/">hwy_gcc9_fix_011725</a></dd>
+          
+        
+          
+          <dd><a href="/jep_google_highway/en/hwy_gcc_fix_092725/">hwy_gcc_fix_092725</a></dd>
+          
+        
+           <strong> 
+          <dd><a href="/jep_google_highway/en/hwy_gcc_sort_warning_fix_071624/">hwy_gcc_sort_warning_fix_071624</a></dd>
+           </strong> 
+        
+          
+          <dd><a href="/jep_google_highway/en/master/">master</a></dd>
+          
+        
+      </dl>
+      
+      
+      <dl>
+        <dt>Downloads</dt>
+        
+          <dd><a href="/jep_google_highway/en/hwy_gcc_sort_warning_fix_071624/jep_google_highway_en_hwy_gcc_sort_warning_fix_071624.epub">epub</a></dd>
+        
+      </dl>
+      
+      
+      <hr/>
+      Free document hosting provided by <a href="https://pages.github.com/">GitHub Pages</a>.
+ 
+    </div>
+  </div>
+
+ <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>
