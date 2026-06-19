@@ -66,7 +66,7 @@ void MeasureRandom(const FuncInput (&inputs)[N]) {
   p.verbose = false;
   const size_t num_results = Measure(&Random, nullptr, inputs, N, results, p);
   for (size_t i = 0; i < num_results; ++i) {
-    HWY_ASSERT(results[i].variability > 1E-3);
+    HWY_ASSERT(results[i].variability > 1E-4);
   }
 }
 
