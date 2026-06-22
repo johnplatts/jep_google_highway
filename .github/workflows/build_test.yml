@@ -299,7 +299,7 @@ jobs:
             # or later when some of the Google Highway tests are compiled with
             # all x86 targets enabled
             cxx_flags: -DHWY_DISABLED_TARGETS=0x58
-            cxx_standard: 21
+            cxx_standard: 17
 
           - name: Clang-22
             extra_deps: clang-22
