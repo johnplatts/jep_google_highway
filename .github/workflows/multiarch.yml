@@ -12,7 +12,7 @@ jobs:
   multiarch:
     runs-on: ubuntu-26.04
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         include:
           - arch: armv7
@@ -21,6 +21,10 @@ jobs:
             compiler_tgt_abi_suffix: eabihf
             cmake_flags: -DHWY_CMAKE_ARM7:BOOL=ON
             qemu_emulator: qemu-arm
+          - arch: ppc64
+            cxx_flags: -mcpu=power9
+            compiler_tgt_cpu_arch: powerpc64
+            qemu_emulator: qemu-ppc64
           - arch: ppc64le
             compiler_tgt_cpu_arch: powerpc64le
             qemu_emulator: qemu-ppc64le
@@ -67,6 +71,7 @@ jobs:
     name: Build and test ${{ matrix.name }} on AArch64
     runs-on: ubuntu-26.04-arm
     strategy:
+      fail-fast: false
       matrix:
         include:
           - name: Clang-22
