@@ -64,7 +64,8 @@ jobs:
           -DCMAKE_CXX_COMPILER_TARGET="${{ matrix.compiler_tgt_cpu_arch }}-linux-gnu${{ matrix.compiler_tgt_abi_suffix }}" \
           -DCMAKE_CROSSCOMPILING=true \
           -DCMAKE_CROSSCOMPILING_EMULATOR="${{ matrix.qemu_emulator }};-L;/usr/${{ matrix.compiler_tgt_cpu_arch }}-linux-gnu${{ matrix.compiler_tgt_abi_suffix }}" \
-          -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR="${{ matrix.compiler_tgt_cpu_arch }}" -B out .
+          -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR="${{ matrix.compiler_tgt_cpu_arch }}" \
+          ${{ matrix.cmake_flags }} -B out .
         cmake --build out
         ctest --test-dir out
   aarch64_cmake:
