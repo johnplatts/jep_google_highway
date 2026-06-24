@@ -100,21 +100,21 @@ jobs:
             cmake_flags: -DHWY_CMAKE_ARM7:BOOL=ON
             qemu_emulator: qemu-arm
           - arch: ppc64
-            cxx_flags: -mcpu=power9 -DHWY_COMPILE_ONLY_STATIC=1
+            cxx_flags: -mcpu=power9 -mabi=ibmlongdouble -DHWY_COMPILE_ONLY_STATIC=1
             compiler_tgt_cpu_arch: powerpc64
             qemu_emulator: qemu-ppc64
           - arch: ppc64le
-            cxx_flags: -mcpu=power8 -DHWY_DISABLED_TARGETS=0x1800000000000
+            cxx_flags: -mcpu=power8 -mabi=ibmlongdouble -DHWY_DISABLED_TARGETS=0x1800000000000
             compiler_tgt_cpu_arch: powerpc64le
             cmake_flags: -DHWY_ENABLE_CONTRIB=OFF
             qemu_emulator: qemu-ppc64le
           - arch: ppc64le
-            cxx_flags: -mcpu=power9 -DHWY_COMPILE_ONLY_STATIC=1
+            cxx_flags: -mcpu=power9 -mabi=ibmlongdouble -DHWY_COMPILE_ONLY_STATIC=1
             compiler_tgt_cpu_arch: powerpc64le
             cmake_flags: -DHWY_ENABLE_CONTRIB=OFF
             qemu_emulator: qemu-ppc64le
           - arch: ppc64le (Power10)
-            cxx_flags: -mcpu=power10 -DHWY_COMPILE_ONLY_STATIC=1
+            cxx_flags: -mcpu=power10 -mabi=ibmlongdouble -DHWY_COMPILE_ONLY_STATIC=1
             compiler_tgt_cpu_arch: powerpc64le
             cmake_flags: -DHWY_ENABLE_CONTRIB=OFF
             qemu_emulator: qemu-ppc64le;-cpu;power10
