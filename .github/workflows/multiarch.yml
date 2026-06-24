@@ -1,3 +1,4 @@
+# https://github.com/marketplace/actions/run-on-architecture
 name: Foreign architectures
 
 on: [push, pull_request]
@@ -10,99 +11,43 @@ permissions:
 
 jobs:
   multiarch:
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
         include:
           - arch: armv7
+            distro: ubuntu_latest
             cxx_flags: -Wno-psabi
-            compiler_tgt_cpu_arch: arm
-            compiler_tgt_abi_suffix: eabihf
             cmake_flags: -DHWY_CMAKE_ARM7:BOOL=ON
-            qemu_emulator: qemu-arm
-          - arch: ppc64
-            cxx_flags: -mcpu=power9
-            compiler_tgt_cpu_arch: powerpc64
-            qemu_emulator: qemu-ppc64
           - arch: ppc64le
-            compiler_tgt_cpu_arch: powerpc64le
-            qemu_emulator: qemu-ppc64le
-          - arch: loongarch64
-            compiler_tgt_cpu_arch: loongarch64
-            qemu_emulator: qemu-loongarch64;-cpu;max
-          - arch: s390x
-            cxx_flags: -march=z14 -mzvector
-            compiler_tgt_cpu_arch: s390x
-            qemu_emulator: qemu-s390x
+            distro: ubuntu_latest
           - arch: riscv64
-            cxx_flags: -DHWY_COMPILE_ONLY_STATIC=1
-            compiler_tgt_cpu_arch: riscv64
-            qemu_emulator: qemu-riscv64;-cpu;max
+            distro: ubuntu_latest
+          - arch: s390x
+            distro: ubuntu_latest
     steps:
-    - name: Harden Runner
-      uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
-      with:
-        egress-policy: audit  # cannot be block - runner does git checkout
-
-    - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-
-    - name: Install deps
-      run: |
-        sudo apt-get update && sudo apt-get install qemu-user \
-        "g++-16-${{ matrix.compiler_tgt_cpu_arch }}-linux-gnu${{ matrix.compiler_tgt_abi_suffix }}"
-
+    - name: Checkout code
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
     - name: Build and test
-      run: |
-        export CMAKE_BUILD_PARALLEL_LEVEL=2
-        export CTEST_PARALLEL_LEVEL=2
-        CXXFLAGS="${{ matrix.cxx_flags }}" \
-          CC="${{ matrix.compiler_tgt_cpu_arch }}-linux-gnu${{ matrix.compiler_tgt_abi_suffix }}-gcc-16" \
-          CXX="${{ matrix.compiler_tgt_cpu_arch }}-linux-gnu${{ matrix.compiler_tgt_abi_suffix }}-g++-16" \
-          cmake -DHWY_WARNINGS_ARE_ERRORS=ON -DCMAKE_CXX_STANDARD=17 \
-          -DCMAKE_C_COMPILER_TARGET="${{ matrix.compiler_tgt_cpu_arch }}-linux-gnu${{ matrix.compiler_tgt_abi_suffix }}" \
-          -DCMAKE_CXX_COMPILER_TARGET="${{ matrix.compiler_tgt_cpu_arch }}-linux-gnu${{ matrix.compiler_tgt_abi_suffix }}" \
-          -DCMAKE_CROSSCOMPILING=true \
-          -DCMAKE_CROSSCOMPILING_EMULATOR="${{ matrix.qemu_emulator }};-L;/usr/${{ matrix.compiler_tgt_cpu_arch }}-linux-gnu${{ matrix.compiler_tgt_abi_suffix }}" \
-          -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR="${{ matrix.compiler_tgt_cpu_arch }}" \
-          ${{ matrix.cmake_flags }} -B out .
-        cmake --build out
-        ctest --test-dir out
-  aarch64_cmake:
-    name: Build and test ${{ matrix.name }} on AArch64
-    runs-on: ubuntu-26.04-arm
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: Clang-22
-            extra_deps: clang-22
-            c_compiler: clang-22
-            cxx_compiler: clang++-22
-            cxx_standard: 17
-
-          - name: GCC-16
-            extra_deps: g++-16
-            c_compiler: gcc-16
-            cxx_compiler: g++-16
-            cxx_flags: -ftrapv
-            cxx_standard: 17
-
-    steps:
-      - name: Harden Runner
-        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
-        with:
-          egress-policy: audit  # cannot be block - runner does git checkout
-
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-
-      - name: Install deps
-        run: sudo apt-get update && sudo apt-get install ${{ matrix.extra_deps }}
-
-      - name: Build and test
+      uses: uraimo/run-on-arch-action@f9b26e3a1a408d5fd530d20c17b9f3f4428ff8d9 # v3.1.0
+      id: build
+      with:
+        arch: ${{ matrix.arch }}
+        distro: ${{ matrix.distro }}
+        # Not required, but speeds up builds
+        githubToken: ${{ github.token }}
+        install: |
+          apt-get update -q -y
+          apt-get install -q -y --no-install-recommends \
+                build-essential \
+                cmake \
+                libgtest-dev \
+                ninja-build \
+                ;
         run: |
           export CMAKE_BUILD_PARALLEL_LEVEL=2
           export CTEST_PARALLEL_LEVEL=2
-          CXXFLAGS="${{ matrix.cxx_flags }}" CC=${{ matrix.c_compiler }} CXX=${{ matrix.cxx_compiler }} cmake -DHWY_WARNINGS_ARE_ERRORS=ON -DCMAKE_CXX_STANDARD=${{ matrix.cxx_standard }} ${{ matrix.extra_cmake_flags }} -B out .
+          CXXFLAGS=${{ matrix.cxx_flags }} cmake -GNinja ${{ matrix.cmake_flags }} -DHWY_SYSTEM_GTEST=ON -DHWY_WARNINGS_ARE_ERRORS=ON -B out .
           cmake --build out
           ctest --test-dir out
