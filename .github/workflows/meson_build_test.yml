@@ -182,7 +182,7 @@ jobs:
               c_compiler: powerpc64le-linux-gnu-gcc-16
               cxx_compiler: powerpc64le-linux-gnu-g++-16
               cxx_flags: -mcpu=power9 -DHWY_COMPILE_ONLY_STATIC=1
-              extra_setup_args: --cross-file .github/meson/gcc_16_ppc64le_meson_cross_compile_config.txt
+              extra_setup_args: -Dcontrib=disabled --cross-file .github/meson/gcc_16_ppc64le_meson_cross_compile_config.txt
               emulator_cmd: qemu-ppc64le -cpu power10 -L /usr/powerpc64le-linux-gnu
 
     steps:
