@@ -17,7 +17,10 @@
 // bucket. The main novelty is that we prevent false positives with only a
 // 14-bit fingerprint plus a 2-bit tag. This reduces lookups to two gathers plus
 // a few SIMD instructions. The tradeoff is that we require at least 256K
-// buckets to cover/constrain the other 18 hash bits.
+// buckets to cover/constrain the other 18 hash bits. This is faster than
+// CuckooTable (with 16-entry primary/secondary buckets) for up to 16M keys,
+// and about half the speed above that, because this always issues two gathers,
+// whereas CuckooTable skips secondary lookups after a primary hit.
 //
 // For individual membership queries in small sets, it is twice as fast as
 // absl::flat_hash_set. When used for batched hash set membership queries
@@ -119,10 +122,17 @@ class Cuckoo2x2 {
     //   Empty entries (tag=00) can never match (tag always 01 or 10).
     // Note that we have >= 256K buckets, hence bits 0-17 govern the choice of
     // bucket and do not have to be verified.
+#if HWY_IS_BIG_ENDIAN
+    const VU16 fp1 =
+        Or(ShiftRight<2>(DupEven(BitCast(du16, h1))), Set(du16, 0x4000));
+    const VU16 fp2 =
+        Or(ShiftRight<2>(DupEven(BitCast(du16, h2))), Set(du16, 0x8000));
+#else
     const VU16 fp1 =
         Or(ShiftRight<2>(DupOdd(BitCast(du16, h1))), Set(du16, 0x4000));
     const VU16 fp2 =
         Or(ShiftRight<2>(DupOdd(BitCast(du16, h2))), Set(du16, 0x8000));
+#endif
 
     const uint32_t* base = data_.entries.data();
 

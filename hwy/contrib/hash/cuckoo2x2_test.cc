@@ -24,7 +24,6 @@
 
 #include "hwy/contrib/hash/cuckoo2x2.h"
 #include "hwy/contrib/thread_pool/thread_pool.h"
-#include "hwy/contrib/thread_pool/topology.h"
 #include "hwy/nanobenchmark.h"
 #include "hwy/profiler.h"
 #include "hwy/timer.h"
@@ -51,9 +50,7 @@ HWY_NOINLINE void TestMultipleSizes() {}
 #else
 
 static ThreadPool MakePool() {
-  static Topology topology;
-  if (topology.packages.empty()) return ThreadPool(ThreadPool::MaxThreads());
-  return ThreadPool(topology.packages[0].cores.size() - 1);
+  return ThreadPool(ThreadPool::NumThreadsFromCores());
 }
 
 // --------------------------------------------------------------------------
@@ -140,7 +137,8 @@ void TestBuildAndQuery(const size_t num_keys) {
           "    Build(%7zu keys): %7.2f ms, %7zu buckets, %.2f b/key "
           "config %2zu, attempt %2zu\n",
           num_keys, elapsed * 1E3, data.NumBuckets(),
-          data.AllocatedBytes() * 8.0 / static_cast<double>(num_keys),
+          static_cast<double>(data.AllocatedBytes()) * 8.0 /
+              static_cast<double>(num_keys),
           data.config_idx, data.attempt_idx);
 
   // Check all keys found via scalar.
@@ -178,4 +176,5 @@ HWY_EXPORT_AND_TEST_BEST_P(Cuckoo2x2Test, TestSimdContains);
 HWY_EXPORT_AND_TEST_BEST_P(Cuckoo2x2Test, TestMultipleSizes);
 HWY_AFTER_TEST();
 }  // namespace hwy
+HWY_TEST_MAIN();
 #endif  // HWY_ONCE

@@ -91,33 +91,7 @@ HWY_CONTRIB_TESTS = (
             ":stats",
             ":thread_pool",
             ":bit_set",
-        ],
-    ),
-    (
-        "hwy/contrib/hash/",
-        "hash_bench",
-        [":hash", ":random"],
-    ),
-    (
-        "hwy/contrib/hash/",
-        "hash_eval",
-        [
-            ":hash",
-            ":profiler",
-            ":random",
-            ":stats",
-            ":thread_pool",
-            ":topology",
             "//hwy/contrib/sort:vqsort",
-        ],
-    ),
-    (
-        "hwy/contrib/hash/",
-        "hash_prospector16",
-        [
-            ":random",
-            ":thread_pool",
-            ":topology",
         ],
     ),
     (
@@ -134,20 +108,6 @@ HWY_CONTRIB_TESTS = (
     ),
     (
         "hwy/contrib/hash/",
-        "phast_bench",
-        [
-            ":hash",
-            ":profiler",
-            ":random",
-            ":robust_statistics",
-            ":thread_pool",
-            ":topology",
-            # Placeholder for flat_hash_set, do not remove
-            # Placeholder2 for flat_hash_set, do not remove
-        ],
-    ),
-    (
-        "hwy/contrib/hash/",
         "cuckoo2x2_test",
         [
             ":hash",
@@ -155,6 +115,17 @@ HWY_CONTRIB_TESTS = (
             ":random",
             ":thread_pool",
             ":topology",
+        ],
+    ),
+    (
+        "hwy/contrib/hash/",
+        "cuckoo_test",
+        [
+            ":algo",
+            ":hash",
+            ":random",
+            "//hwy/contrib/sort:vqsort",
+            # Placeholder for ortools, do not remove
         ],
     ),
     (
