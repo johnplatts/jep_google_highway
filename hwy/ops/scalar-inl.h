@@ -1997,6 +1997,18 @@ HWY_API size_t FindKnownLastTrue(D /* tag */, const Mask1<T> /* m */) {
 
 // ------------------------------ Compress, CompressBits
 
+#ifdef HWY_NATIVE_COMPRESS8
+#undef HWY_NATIVE_COMPRESS8
+#else
+#define HWY_NATIVE_COMPRESS8
+#endif
+
+#ifdef HWY_NATIVE_COMPRESS16_32_64
+#undef HWY_NATIVE_COMPRESS16_32_64
+#else
+#define HWY_NATIVE_COMPRESS16_32_64
+#endif
+
 template <typename T>
 struct CompressIsPartition {
   enum { value = 1 };

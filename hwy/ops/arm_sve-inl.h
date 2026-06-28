@@ -4480,6 +4480,12 @@ HWY_API V BroadcastBlock(V v) {
 
 // ------------------------------ Compress (PromoteTo)
 
+#ifdef HWY_NATIVE_COMPRESS16_32_64
+#undef HWY_NATIVE_COMPRESS16_32_64
+#else
+#define HWY_NATIVE_COMPRESS16_32_64
+#endif
+
 template <typename T>
 struct CompressIsPartition {
 #if HWY_TARGET == HWY_SVE_256 || HWY_TARGET == HWY_SVE2_128
@@ -4618,12 +4624,18 @@ HWY_API V CompressNot(V v, svbool_t mask) {
 }
 
 // ------------------------------ CompressBlocksNot
+
+#ifdef HWY_NATIVE_COMPRESS_BLOCKS_NOT
+#undef HWY_NATIVE_COMPRESS_BLOCKS_NOT
+#else
+#define HWY_NATIVE_COMPRESS_BLOCKS_NOT
+#endif
+
 HWY_API svuint64_t CompressBlocksNot(svuint64_t v, svbool_t mask) {
 #if HWY_TARGET == HWY_SVE2_128
   (void)mask;
   return v;
-#endif
-#if HWY_TARGET == HWY_SVE_256 || HWY_IDE
+#elif HWY_TARGET == HWY_SVE_256 || HWY_IDE
   uint64_t bits = 0;           // predicate reg is 32-bit
   CopyBytes<4>(&mask, &bits);  // not same size - 64-bit more efficient
   // Concatenate LSB for upper and lower blocks, pre-scale by 4 for table idx.
@@ -4633,9 +4645,9 @@ HWY_API svuint64_t CompressBlocksNot(svuint64_t v, svbool_t mask) {
                                                         0, 1, 2, 3, 0, 1, 2, 3};
   const ScalableTag<uint64_t> d;
   return TableLookupLanes(v, SetTableIndices(d, table + offset));
-#endif
-
+#else
   return CompressNot(v, mask);
+#endif
 }
 
 // ------------------------------ CompressStore

@@ -120,6 +120,12 @@ HWY_API V RotateRight(V v) {
 #define HWY_NATIVE_COMPRESS8
 #endif
 
+#ifdef HWY_NATIVE_COMPRESS16_32_64
+#undef HWY_NATIVE_COMPRESS16_32_64
+#else
+#define HWY_NATIVE_COMPRESS16_32_64
+#endif
+
 namespace detail {
 
 #if HWY_TARGET <= HWY_AVX3_DL  // VBMI2
@@ -385,13 +391,6 @@ HWY_API V Compress(V v, const M mask) {
 template <class V, class M, HWY_IF_NOT_T_SIZE_V(V, 8)>
 HWY_API V CompressNot(V v, const M mask) {
   return Compress(v, Not(mask));
-}
-
-// uint64_t lanes. Only implement for 256 and 512-bit vectors because this is a
-// no-op for 128-bit.
-template <class V, class M, HWY_IF_V_SIZE_GT_D(DFromV<V>, 16)>
-HWY_API V CompressBlocksNot(V v, M mask) {
-  return CompressNot(v, mask);
 }
 
 // ------------------------------ CompressBits

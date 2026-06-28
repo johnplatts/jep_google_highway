@@ -1574,9 +1574,8 @@ template <int kBytes, class D>
 HWY_API VFromD<D> CombineShiftRightBytes(D d, VFromD<D> hi, VFromD<D> lo) {
   VFromD<D> ret;
   const uint8_t* HWY_RESTRICT lo8 =
-      reinterpret_cast<const uint8_t * HWY_RESTRICT>(lo.raw);
-  uint8_t* HWY_RESTRICT ret8 =
-      reinterpret_cast<uint8_t * HWY_RESTRICT>(ret.raw);
+      reinterpret_cast<const uint8_t* HWY_RESTRICT>(lo.raw);
+  uint8_t* HWY_RESTRICT ret8 = reinterpret_cast<uint8_t* HWY_RESTRICT>(ret.raw);
   CopyBytes<d.MaxBytes() - kBytes>(lo8 + kBytes, ret8);
   CopyBytes<kBytes>(hi.raw, ret8 + d.MaxBytes() - kBytes);
   return ret;
@@ -1588,8 +1587,7 @@ template <int kBytes, class D>
 HWY_API VFromD<D> ShiftLeftBytes(D d, VFromD<D> v) {
   static_assert(0 <= kBytes && kBytes <= 16, "Invalid kBytes");
   VFromD<D> ret;
-  uint8_t* HWY_RESTRICT ret8 =
-      reinterpret_cast<uint8_t * HWY_RESTRICT>(ret.raw);
+  uint8_t* HWY_RESTRICT ret8 = reinterpret_cast<uint8_t* HWY_RESTRICT>(ret.raw);
   ZeroBytes<kBytes>(ret8);
   CopyBytes<d.MaxBytes() - kBytes>(v.raw, ret8 + kBytes);
   return ret;
@@ -1619,9 +1617,8 @@ HWY_API VFromD<D> ShiftRightBytes(D d, VFromD<D> v) {
   static_assert(0 <= kBytes && kBytes <= 16, "Invalid kBytes");
   VFromD<D> ret;
   const uint8_t* HWY_RESTRICT v8 =
-      reinterpret_cast<const uint8_t * HWY_RESTRICT>(v.raw);
-  uint8_t* HWY_RESTRICT ret8 =
-      reinterpret_cast<uint8_t * HWY_RESTRICT>(ret.raw);
+      reinterpret_cast<const uint8_t* HWY_RESTRICT>(v.raw);
+  uint8_t* HWY_RESTRICT ret8 = reinterpret_cast<uint8_t* HWY_RESTRICT>(ret.raw);
   CopyBytes<d.MaxBytes() - kBytes>(v8 + kBytes, ret8);
   ZeroBytes<kBytes>(ret8 + d.MaxBytes() - kBytes);
   return ret;
@@ -2531,12 +2528,12 @@ template <typename T, size_t N, typename TI, size_t NI>
 HWY_API Vec128<TI, NI> TableLookupBytes(Vec128<T, N> v,
                                         Vec128<TI, NI> indices) {
   const uint8_t* HWY_RESTRICT v_bytes =
-      reinterpret_cast<const uint8_t * HWY_RESTRICT>(v.raw);
+      reinterpret_cast<const uint8_t* HWY_RESTRICT>(v.raw);
   const uint8_t* HWY_RESTRICT idx_bytes =
       reinterpret_cast<const uint8_t*>(indices.raw);
   Vec128<TI, NI> ret;
   uint8_t* HWY_RESTRICT ret_bytes =
-      reinterpret_cast<uint8_t * HWY_RESTRICT>(ret.raw);
+      reinterpret_cast<uint8_t* HWY_RESTRICT>(ret.raw);
   for (size_t i = 0; i < NI * sizeof(TI); ++i) {
     const size_t idx = idx_bytes[i];
     // Avoid out of bounds reads.
@@ -2701,9 +2698,21 @@ HWY_API intptr_t FindLastTrue(D d, MFromD<D> mask) {
 
 // ------------------------------ Compress
 
+#ifdef HWY_NATIVE_COMPRESS8
+#undef HWY_NATIVE_COMPRESS8
+#else
+#define HWY_NATIVE_COMPRESS8
+#endif
+
+#ifdef HWY_NATIVE_COMPRESS16_32_64
+#undef HWY_NATIVE_COMPRESS16_32_64
+#else
+#define HWY_NATIVE_COMPRESS16_32_64
+#endif
+
 template <typename T>
 struct CompressIsPartition {
-  enum { value = (sizeof(T) != 1) };
+  enum { value = 1 };
 };
 
 template <typename T, size_t N>
@@ -2784,12 +2793,6 @@ HWY_API Vec128<T, N> CompressNot(Vec128<T, N> v, Mask128<T, N> mask) {
   return ret;
 }
 
-// ------------------------------ CompressBlocksNot
-HWY_API Vec128<uint64_t> CompressBlocksNot(Vec128<uint64_t> v,
-                                           Mask128<uint64_t> /* m */) {
-  return v;
-}
-
 // ------------------------------ CompressBits
 template <typename T, size_t N>
 HWY_API Vec128<T, N> CompressBits(Vec128<T, N> v,
@@ -2799,8 +2802,7 @@ HWY_API Vec128<T, N> CompressBits(Vec128<T, N> v,
 
 // ------------------------------ CompressStore
 
-// generic_ops-inl defines the 8-bit versions.
-template <class D, HWY_IF_NOT_T_SIZE_D(D, 1)>
+template <class D>
 HWY_API size_t CompressStore(VFromD<D> v, MFromD<D> mask, D d,
                              TFromD<D>* HWY_RESTRICT unaligned) {
   size_t count = 0;
@@ -2813,14 +2815,14 @@ HWY_API size_t CompressStore(VFromD<D> v, MFromD<D> mask, D d,
 }
 
 // ------------------------------ CompressBlendedStore
-template <class D, HWY_IF_NOT_T_SIZE_D(D, 1)>
+template <class D>
 HWY_API size_t CompressBlendedStore(VFromD<D> v, MFromD<D> mask, D d,
                                     TFromD<D>* HWY_RESTRICT unaligned) {
   return CompressStore(v, mask, d, unaligned);
 }
 
 // ------------------------------ CompressBitsStore
-template <class D, HWY_IF_NOT_T_SIZE_D(D, 1)>
+template <class D>
 HWY_API size_t CompressBitsStore(VFromD<D> v, const uint8_t* HWY_RESTRICT bits,
                                  D d, TFromD<D>* HWY_RESTRICT unaligned) {
   const MFromD<D> mask = LoadMaskBits(d, bits);

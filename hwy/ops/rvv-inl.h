@@ -4442,6 +4442,12 @@ HWY_API V ReverseBlocks(D d, V v) {
 #define HWY_NATIVE_COMPRESS8
 #endif
 
+#ifdef HWY_NATIVE_COMPRESS16_32_64
+#undef HWY_NATIVE_COMPRESS16_32_64
+#else
+#define HWY_NATIVE_COMPRESS16_32_64
+#endif
+
 template <typename T>
 struct CompressIsPartition {
   enum { value = 0 };
@@ -4516,12 +4522,6 @@ HWY_API VFromD<D> LoadExpand(MFromD<D> mask, D d,
 template <class V, class M>
 HWY_API V CompressNot(V v, const M mask) {
   return Compress(v, Not(mask));
-}
-
-// ------------------------------ CompressBlocksNot
-template <class V, class M>
-HWY_API V CompressBlocksNot(V v, const M mask) {
-  return CompressNot(v, mask);
 }
 
 // ------------------------------ CompressStore
