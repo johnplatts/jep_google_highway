@@ -386,6 +386,11 @@ HWY_API V Compress(V v, const M mask) {
   return BitCast(d, detail::NativeCompress(BitCast(du, v), mu));
 }
 
+template <class D>
+HWY_API VFromD<D> Compress(D /*d*/, VFromD<D> v, MFromD<D> m) {
+  return Compress(v, m);
+}
+
 // ------------------------------ CompressNot
 
 template <class V, class M, HWY_IF_NOT_T_SIZE_V(V, 8)>
@@ -393,10 +398,21 @@ HWY_API V CompressNot(V v, const M mask) {
   return Compress(v, Not(mask));
 }
 
+template <class D>
+HWY_API VFromD<D> CompressNot(D /*d*/, VFromD<D> v, MFromD<D> m) {
+  return CompressNot(v, m);
+}
+
 // ------------------------------ CompressBits
 template <class V>
 HWY_API V CompressBits(V v, const uint8_t* HWY_RESTRICT bits) {
   return Compress(v, LoadMaskBits(DFromV<V>(), bits));
+}
+
+template <class D>
+HWY_API VFromD<D> CompressBits(D /*d*/, VFromD<D> v,
+                               const uint8_t* HWY_RESTRICT bits) {
+  return CompressBits(v, bits);
 }
 
 // ------------------------------ CompressStore
