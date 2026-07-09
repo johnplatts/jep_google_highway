@@ -10137,7 +10137,7 @@ HWY_INLINE Vec128<T, N> IdxFromNotBits(hwy::SizeTag<8> /*tag*/,
 // Helper function called by both Compress and CompressStore - avoids a
 // redundant BitsFromMask in the latter.
 template <typename T, size_t N>
-HWY_INLINE Vec128<T, N> Compress(Vec128<T, N> v, uint64_t mask_bits) {
+HWY_INLINE Vec128<T, N> CompressBits(Vec128<T, N> v, uint64_t mask_bits) {
   const auto idx =
       detail::IdxFromBits<T, N>(hwy::SizeTag<sizeof(T)>(), mask_bits);
   using D = DFromV<decltype(v)>;
@@ -10146,7 +10146,7 @@ HWY_INLINE Vec128<T, N> Compress(Vec128<T, N> v, uint64_t mask_bits) {
 }
 
 template <typename T, size_t N>
-HWY_INLINE Vec128<T, N> CompressNot(Vec128<T, N> v, uint64_t mask_bits) {
+HWY_INLINE Vec128<T, N> CompressNotBits(Vec128<T, N> v, uint64_t mask_bits) {
   const auto idx =
       detail::IdxFromNotBits<T, N>(hwy::SizeTag<sizeof(T)>(), mask_bits);
   using D = DFromV<decltype(v)>;
@@ -10178,7 +10178,12 @@ HWY_API Vec128<T, N> Compress(Vec128<T, N> v, Mask128<T, N> mask) {
 template <typename T, size_t N, HWY_IF_T_SIZE_ONE_OF(T, (1 << 2) | (1 << 4))>
 HWY_API Vec128<T, N> Compress(Vec128<T, N> v, Mask128<T, N> mask) {
   const DFromV<decltype(v)> d;
-  return detail::Compress(v, BitsFromMask(d, mask));
+  return detail::CompressBits(v, BitsFromMask(d, mask));
+}
+
+template <class D, HWY_IF_NOT_T_SIZE_D(D, 1)>
+HWY_API VFromD<D> Compress(D /*d*/, VFromD<D> v, MFromD<D> m) {
+  return Compress(v, m);
 }
 
 // Single lane: no-op
@@ -10206,9 +10211,14 @@ HWY_API Vec128<T, N> CompressNot(Vec128<T, N> v, Mask128<T, N> mask) {
   // For partial vectors, we cannot pull the Not() into the table because
   // BitsFromMask clears the upper bits.
   if (N < 16 / sizeof(T)) {
-    return detail::Compress(v, BitsFromMask(d, Not(mask)));
+    return detail::CompressBits(v, BitsFromMask(d, Not(mask)));
   }
-  return detail::CompressNot(v, BitsFromMask(d, mask));
+  return detail::CompressNotBits(v, BitsFromMask(d, mask));
+}
+
+template <class D, HWY_IF_NOT_T_SIZE_D(D, 1)>
+HWY_API VFromD<D> CompressNot(D /*d*/, VFromD<D> v, MFromD<D> m) {
+  return CompressNot(v, m);
 }
 
 // ------------------------------ CompressBlocksNot
@@ -10229,7 +10239,13 @@ HWY_INLINE Vec128<T, N> CompressBits(Vec128<T, N> v,
     mask_bits &= (1ull << N) - 1;
   }
 
-  return detail::Compress(v, mask_bits);
+  return detail::CompressBits(v, mask_bits);
+}
+
+template <class D, HWY_IF_NOT_T_SIZE_D(D, 1)>
+HWY_API VFromD<D> CompressBits(D /*d*/, VFromD<D> v,
+                               const uint8_t* HWY_RESTRICT bits) {
+  return CompressBits(v, bits);
 }
 
 // ------------------------------ CompressStore
@@ -10237,7 +10253,7 @@ template <class D, HWY_IF_NOT_T_SIZE_D(D, 1)>
 HWY_API size_t CompressStore(VFromD<D> v, MFromD<D> mask, D d,
                              TFromD<D>* HWY_RESTRICT unaligned) {
   const uint64_t mask_bits = BitsFromMask(d, mask);
-  StoreU(detail::Compress(v, mask_bits), d, unaligned);
+  StoreU(detail::CompressBits(v, mask_bits), d, unaligned);
   return PopCount(mask_bits);
 }
 
@@ -10250,7 +10266,7 @@ HWY_API size_t CompressBlendedStore(VFromD<D> v, MFromD<D> m, D d,
   const size_t count = PopCount(mask_bits);
   const MFromD<D> store_mask = RebindMask(d, FirstN(du, count));
   const VFromD<decltype(du)> compressed =
-      detail::Compress(BitCast(du, v), mask_bits);
+      detail::CompressBits(BitCast(du, v), mask_bits);
   BlendedStore(BitCast(d, compressed), store_mask, d, unaligned);
   return count;
 }
@@ -10267,7 +10283,7 @@ HWY_API size_t CompressBitsStore(VFromD<D> v, const uint8_t* HWY_RESTRICT bits,
     mask_bits &= (1ull << d.MaxLanes()) - 1;
   }
 
-  StoreU(detail::Compress(v, mask_bits), d, unaligned);
+  StoreU(detail::CompressBits(v, mask_bits), d, unaligned);
   return PopCount(mask_bits);
 }
 
