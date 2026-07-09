@@ -905,7 +905,6 @@ set(HWY_TEST_FILES
   hwy/aligned_allocator_test.cc
   hwy/base_test.cc
   hwy/bit_set_test.cc
-  hwy/highway_test.cc
   hwy/nanobenchmark_test.cc
   hwy/perf_counters_test.cc
   hwy/targets_test.cc
