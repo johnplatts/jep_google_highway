@@ -16,10 +16,10 @@ jobs:
       fail-fast: true
       matrix:
         include:
-          - name: GCC-16
-            extra_deps: g++-16
-            c_compiler: gcc-16
-            cxx_compiler: g++-16
+          - name: GCC-15
+            extra_deps: g++-15
+            c_compiler: gcc-15
+            cxx_compiler: g++-15
             cxx_flags: -ftrapv
             cxx_standard: 17
 
